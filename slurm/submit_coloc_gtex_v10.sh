@@ -15,11 +15,11 @@ set -euo pipefail
 # CONST: edit these paths for each project.
 PROJECT_DIR="/projects/cbmr_shared/people/wkq953/non-GDPR/project_share/Saliva/coloc"
 REGION_INPUT="${PROJECT_DIR}/result/all_genes_within_range_with_ensemblID.csv"
-GTEX_TISSUE_TABLE="/projects/holbaek-AUDIT/people/wkq953/project_proteomics_holbaek/data/eqtl_gtex_v10_hg38/gtex_eqtl_sample_size_formatted.csv"
 GTEX_EQTL_DIR="/datasets/cbmr_shared/resources/gtex/GTEx_Analysis_v10_QTLs/GTEx_Analysis_v10_eQTL_all_associations"
 OUTPUT_DIR="${PROJECT_DIR}/result/coloc_pqtl_eqtl_gtex_v10_w_region"
 SUBMIT_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODE_DIR="$(cd "${SUBMIT_SCRIPT_DIR}/.." && pwd)"
+GTEX_TISSUE_TABLE="${CODE_DIR}/data/gtex_eqtl_sample_size_formatted.csv"
 FUNCTION_FILE="${CODE_DIR}/R/coloc_functions.R"
 RUN_SCRIPT="${CODE_DIR}/scripts/run_coloc_gtex_v10.R"
 

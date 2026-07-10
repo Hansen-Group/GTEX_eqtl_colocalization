@@ -1,0 +1,51 @@
+GTEX_tissue,Category,GTEX_Name,UBERON,eQTL_sample_size,rnaseq_sample_seq
+Adipose_Subcutaneous,Metabolic,Adipose - Subcutaneous,UBERON:0002190,711,714
+Adipose_Visceral_Omentum,Metabolic,Adipose - Visceral (Omentum),UBERON:0010414,584,587
+Adrenal_Gland,Metabolic,Adrenal Gland,UBERON:0002369,295,295
+Colon_Sigmoid,Metabolic,Colon - Sigmoid,UBERON:0001159,418,419
+Colon_Transverse,Metabolic,Colon - Transverse,UBERON:0001157,478,479
+Esophagus_Gastroesophageal_Junction,Metabolic,Esophagus - Gastroesophageal Junction,UBERON:0004550,403,403
+Esophagus_Mucosa,Metabolic,Esophagus - Mucosa,UBERON:0006920,614,614
+Esophagus_Muscularis,Metabolic,Esophagus - Muscularis,UBERON:0004648,561,561
+Kidney_Cortex,Metabolic,Kidney - Cortex,UBERON:0001225,103,104
+Liver,Metabolic,Liver,UBERON:0001114,261,262
+Muscle_Skeletal,Metabolic,Muscle - Skeletal,UBERON:0011907,816,818
+Pancreas,Metabolic,Pancreas,UBERON:0001150,362,362
+Small_Intestine_Terminal_Ileum,Metabolic,Small Intestine - Terminal Ileum,UBERON:0001211,206,207
+Stomach,Metabolic,Stomach,UBERON:0000945,407,407
+Artery_Aorta,Cardiovascular,Artery - Aorta,UBERON:0001496,472,472
+Artery_Coronary,Cardiovascular,Artery - Coronary,UBERON:0001621,268,268
+Artery_Tibial,Cardiovascular,Artery - Tibial,UBERON:0007610,689,691
+Heart_Atrial_Appendage,Cardiovascular,Heart - Atrial Appendage,UBERON:0006631,460,461
+Heart_Left_Ventricle,Cardiovascular,Heart - Left Ventricle,UBERON:0006566,450,452
+Brain_Amygdala,Brain,Brain - Amygdala,UBERON:0001876,180,181
+Brain_Anterior_cingulate_cortex_BA24,Brain,Brain - Anterior qcingulate cortex (BA24),UBERON:0009835,233,233
+Brain_Caudate_basal_ganglia,Brain,Brain - Caudate (basal ganglia),UBERON:0001873,298,300
+Brain_Cerebellar_Hemisphere,Brain,Brain - Cerebellar Hemisphere,UBERON:0002037,276,277
+Brain_Cerebellum,Brain,Brain - Cerebellum,UBERON:0002037,264,266
+Brain_Cortex,Brain,Brain - Cortex,UBERON:0001870,268,270
+Brain_Frontal_Cortex_BA9,Brain,Brain - Frontal Cortex (BA9),UBERON:0009834,268,269
+Brain_Hippocampus,Brain,Brain - Hippocampus,UBERON:0001954,254,255
+Brain_Hypothalamus,Brain,Brain - Hypothalamus,UBERON:0001898,256,257
+Brain_Nucleus_accumbens_basal_ganglia,Brain,Brain - Nucleus accumbens (basal ganglia),UBERON:0001882,284,285
+Brain_Putamen_basal_ganglia,Brain,Brain - Putamen (basal ganglia),UBERON:0001874,253,254
+Brain_Spinal_cord_cervical_c-1,Brain,Brain - Spinal cord (cervical c-1),UBERON:0006469,203,204
+Brain_Substantia_nigra,Brain,Brain - Substantia nigra,UBERON:0002038,183,183
+Pituitary,Brain,Pituitary,UBERON:0000007,311,313
+Cells_EBV-transformed_lymphocytes,Immune,Cells - EBV-transformed lymphocytes,EFO:0000572,326,327
+Spleen,Immune,Spleen,UBERON:0002106,277,277
+Whole_Blood,Immune,Whole Blood,UBERON:0013756,800,803
+Bladder,Other,Bladder,UBERON:0001255,77,77
+Breast_Mammary_Tissue,Other,Breast - Mammary Tissue,UBERON:0008367,511,514
+Cells_Cultured_fibroblasts,Other,Cells - Cultured fibroblasts,EFO:0002009,649,652
+Lung,Other,Lung,UBERON:0008952,601,604
+Minor_Salivary_Gland,Other,Minor Salivary Gland,UBERON:0006330,180,181
+Nerve_Tibial,Other,Nerve - Tibial,UBERON:0001323,667,670
+Ovary,Other,Ovary,UBERON:0000992,192,193
+Prostate,Other,Prostate,UBERON:0002367,281,282
+Skin_Not_Sun_Exposed_Suprapubic,Other,Skin - Not Sun Exposed (Suprapubic),UBERON:0036149,649,651
+Skin_Sun_Exposed_Lower_leg,Other,Skin - Sun Exposed (Lower leg),UBERON:0004264,751,754
+Testis,Other,Testis,UBERON:0000473,413,414
+Thyroid,Other,Thyroid,UBERON:0002046,681,684
+Uterus,Other,Uterus,UBERON:0000995,152,153
+Vagina,Other,Vagina,UBERON:0000996,170,170

@@ -12,6 +12,7 @@ The current code supports:
 Main files:
 
 - `R/coloc_functions.R`: shared input parsing, GTEx formatting, allele matching, coloc, and output helpers.
+- `data/gtex_eqtl_sample_size_formatted.csv`: GTEx tissue table used by the SLURM array.
 - `scripts/run_coloc_gtex_v10.R`: runs one GTEx tissue.
 - `scripts/combine_coloc_summaries.R`: combines per-tissue summaries after the array finishes.
 - `scripts/check_coloc_env.R`: checks or installs required R packages and writes package versions.
@@ -205,7 +206,6 @@ Edit the constants at the top of `slurm/submit_coloc_gtex_v10.sh`:
 ```bash
 PROJECT_DIR="/projects/cbmr_shared/people/wkq953/non-GDPR/project_share/Saliva/coloc"
 REGION_INPUT="${PROJECT_DIR}/result/all_genes_within_range_with_ensemblID.csv"
-GTEX_TISSUE_TABLE="/projects/holbaek-AUDIT/people/wkq953/project_proteomics_holbaek/data/eqtl_gtex_v10_hg38/gtex_eqtl_sample_size_formatted.csv"
 GTEX_EQTL_DIR="/datasets/cbmr_shared/resources/gtex/GTEx_Analysis_v10_QTLs/GTEx_Analysis_v10_eQTL_all_associations"
 OUTPUT_DIR="${PROJECT_DIR}/result/coloc_pqtl_eqtl_gtex_v10_w_region"
 COLOC_R_LIB_PATH="/home/wkq953/segment/pipeline/multiome-pipeline_sh_29012025/renv/library/R-4.3/x86_64-pc-linux-gnu"
@@ -217,7 +217,7 @@ Submit from the repo root:
 sbatch slurm/submit_coloc_gtex_v10.sh
 ```
 
-The default array is `#SBATCH --array=2-51`, assuming line 1 of `GTEX_TISSUE_TABLE` is a header and column 1 is the GTEx tissue name. Logs are written to:
+The default array is `#SBATCH --array=2-51`, using `data/gtex_eqtl_sample_size_formatted.csv`. Line 1 is a header and column 1 is the GTEx tissue name. Logs are written to:
 
 ```text
 logs/coloc_<tissue>.out
