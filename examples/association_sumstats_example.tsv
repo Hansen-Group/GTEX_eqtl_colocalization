@@ -1,0 +1,3 @@
+chr	position	rsid	effect_allele	other_allele	beta	varbeta	pvalue	maf
+1	103606982	rs374951127	T	C	0.0421	0.00013	0.0032	0.183
+1	103608411	rs2246127	A	G	-0.0187	0.00009	0.211	0.401
