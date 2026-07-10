@@ -100,6 +100,7 @@ After connecting to Esrum, run the script above against the library used for thi
 - GTEx variant IDs are converted to `chr`, `position`, `effect_allele`, and `other_allele`.
 - rsIDs for GTEx variants are annotated with `SNPlocs.Hsapiens.dbSNP155.GRCh38`.
 - Rows with missing rsID, beta, varbeta, p-value, or allele frequency are removed before coloc.
+- GTEx eQTL is passed to `coloc.abf()` as a quantitative dataset with `sdY = 1` by default. This follows the coloc discussion in [chr1swallace/coloc#201](https://github.com/chr1swallace/coloc/issues/201), which asks whether "`sdY = 1` be used for GTEx eQTL data in coloc". Override with `--sdY` only if you intentionally need a different eQTL phenotype standard deviation.
 - `match_coloc_region()` aligns pQTL/GWAS and eQTL effect alleles by literal match or full flip, with no separate check for palindromic A/T or C/G SNPs. This relies on both inputs reporting effect alleles against the same GRCh38 reference/`+` strand. GTEx does this through `variant_id`; check custom pQTL/GWAS strand conventions before trusting coloc results near palindromic variants.
 
 ## 2. How to Run
@@ -117,8 +118,7 @@ Rscript scripts/run_coloc_gtex_v10.R \
   --eqtl-dir /datasets/cbmr_shared/resources/gtex/GTEx_Analysis_v10_QTLs/GTEx_Analysis_v10_eQTL_all_associations \
   --lib-path /home/wkq953/segment/pipeline/multiome-pipeline_sh_29012025/renv/library/R-4.3/x86_64-pc-linux-gnu \
   --input-format auto \
-  --dist 500000 \
-  --sdY 1
+  --dist 500000
 ```
 
 `--input-format auto` detects either fixed-region input or lead-SNP input.

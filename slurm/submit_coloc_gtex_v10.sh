@@ -49,7 +49,6 @@ Rscript "${RUN_SCRIPT}" \
   --function-file "${FUNCTION_FILE}" \
   --lib-path "${COLOC_R_LIB_PATH}" \
   --input-format auto \
-  --dist 500000 \
-  --sdY 1
+  --dist 500000
 
 echo "Finished at: $(date)"
