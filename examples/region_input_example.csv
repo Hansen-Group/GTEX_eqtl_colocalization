@@ -1,2 +1,2 @@
-range_bp,CHR,start,end,Gene,ensembl,file_path,N
-103106982-104418463,1,103106982,104418463,AMY2A,ENSG00000243480,/path/to/pqtl_or_gwas_sumstats.tsv,151521
+range_bp,CHR,start,end,Gene,ensembl,file_path,trait_type,N,sdY,s
+103106982-104418463,1,103106982,104418463,AMY2A,ENSG00000243480,/path/to/pqtl_or_gwas_sumstats.tsv,quantitative,151521,,

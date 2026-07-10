@@ -1,2 +1,2 @@
-exposure	lead_cispQTL	PG.Genes	variantID	ensemblID	chr	pos	file_path	N
-Q9BWP8_COLEC11	rs6542680	COLEC11	2_3592552_C_T	ENSG00000118004	2	3592552	/path/to/pqtl_or_gwas_sumstats.tsv	3705
+exposure	lead_cispQTL	PG.Genes	variantID	ensemblID	chr	pos	file_path	trait_type	N	sdY	s
+Q9BWP8_COLEC11	rs6542680	COLEC11	2_3592552_C_T	ENSG00000118004	2	3592552	/path/to/pqtl_or_gwas_sumstats.tsv	quantitative	3705		

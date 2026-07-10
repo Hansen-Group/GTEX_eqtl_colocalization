@@ -126,7 +126,7 @@ Rscript scripts/run_coloc_gtex_v10.R \
 Fixed-region input requires:
 
 ```text
-range_bp, CHR, start, end, Gene, ensembl, file_path, N
+range_bp, CHR, start, end, Gene, ensembl, file_path
 ```
 
 Example file:
@@ -138,7 +138,7 @@ examples/region_input_example.csv
 Lead-SNP input requires:
 
 ```text
-exposure, lead_cispQTL, chr, pos, PG.Genes, file_path, N
+exposure, lead_cispQTL, chr, pos, PG.Genes, file_path
 ```
 
 and one of:
@@ -151,6 +151,24 @@ Example file:
 
 ```text
 examples/lead_input_example.tsv
+```
+
+pQTL/GWAS trait metadata is read from the input table, not from the summary-statistics file:
+
+```text
+trait_type, N, sdY, s
+```
+
+Rules:
+
+- `trait_type` can be `quantitative`/`quant` or `binary`/`cc`. If missing, the default is `quantitative`.
+- For quantitative pQTL/GWAS input, provide either `N` or `sdY` when available. If both `N` and `sdY` are missing, the workflow defaults to `sdY = 1`.
+- For binary/case-control GWAS input, provide `N` and `s`, where `s` is the case fraction. Binary input is passed to coloc as `type = "cc"`.
+
+Binary GWAS example file:
+
+```text
+examples/binary_gwas_region_input_example.csv
 ```
 
 For lead-SNP input, the tested region is:
@@ -248,6 +266,7 @@ coloc_sig_pp07_summary_w_region.rds
 Important output columns:
 
 - `gene_name`, `gene_symbol`, `ensembl`, `region`, `tissue`, `input_format`
+- `trait_type`, `trait_N`, `trait_sdY`, `trait_s`
 - `nsnps`
 - `PP.H0.abf`, `PP.H1.abf`, `PP.H2.abf`, `PP.H3.abf`, `PP.H4.abf`
 - `pp4_cond = PP.H4.abf / (PP.H3.abf + PP.H4.abf)`

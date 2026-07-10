@@ -110,8 +110,8 @@ read_coloc_table <- function(path) {
 }
 
 detect_coloc_input_format <- function(input_df) {
-  region_cols <- c("range_bp", "CHR", "start", "end", "Gene", "ensembl", "file_path", "N")
-  lead_cols <- c("exposure", "lead_cispQTL", "chr", "pos", "PG.Genes", "file_path", "N")
+  region_cols <- c("range_bp", "CHR", "start", "end", "Gene", "ensembl", "file_path")
+  lead_cols <- c("exposure", "lead_cispQTL", "chr", "pos", "PG.Genes", "file_path")
 
   if (all(region_cols %in% colnames(input_df))) {
     return("region")
@@ -136,7 +136,7 @@ standardize_coloc_input <- function(input_df, input_format = "auto", dist = 5000
   }
 
   if (identical(input_format, "region")) {
-    required_region_cols <- c("range_bp", "CHR", "start", "end", "Gene", "ensembl", "file_path", "N")
+    required_region_cols <- c("range_bp", "CHR", "start", "end", "Gene", "ensembl", "file_path")
     assert_required_columns(input_df, required_region_cols, "region input")
 
     input_df |>
@@ -152,7 +152,7 @@ standardize_coloc_input <- function(input_df, input_format = "auto", dist = 5000
         row_label = paste(result_name, result_region, sep = "_")
       )
   } else if (identical(input_format, "lead")) {
-    required_lead_cols <- c("exposure", "lead_cispQTL", "chr", "pos", "PG.Genes", "file_path", "N")
+    required_lead_cols <- c("exposure", "lead_cispQTL", "chr", "pos", "PG.Genes", "file_path")
     assert_required_columns(input_df, required_lead_cols, "lead-SNP input")
 
     ensembl_col <- intersect(c("ensemblID", "ensembl_gene_id", "ensembl"), colnames(input_df))
@@ -180,6 +180,101 @@ standardize_coloc_input <- function(input_df, input_format = "auto", dist = 5000
   } else {
     stop("--input-format must be one of: auto, region, lead", call. = FALSE)
   }
+}
+
+first_non_missing_scalar <- function(df, candidate_cols, default = NA_character_) {
+  existing_cols <- intersect(candidate_cols, colnames(df))
+  for (col in existing_cols) {
+    value <- df[[col]][[1]]
+    if (!is.na(value) && !identical(as.character(value), "")) {
+      return(value)
+    }
+  }
+  default
+}
+
+normalize_coloc_trait_type <- function(trait_type) {
+  trait_type <- tolower(as.character(trait_type))
+
+  if (trait_type %in% c("quant", "quantitative")) {
+    return("quant")
+  }
+  if (trait_type %in% c("binary", "case_control", "case-control", "cc")) {
+    return("cc")
+  }
+
+  stop(
+    "Unsupported trait type: ",
+    trait_type,
+    ". Use quantitative/quant or binary/cc.",
+    call. = FALSE
+  )
+}
+
+get_coloc_trait_metadata <- function(info_df) {
+  trait_type <- first_non_missing_scalar(
+    info_df,
+    c("trait_type", "type", "dataset_type"),
+    default = "quant"
+  )
+  trait_type <- normalize_coloc_trait_type(trait_type)
+
+  sample_size <- suppressWarnings(as.numeric(first_non_missing_scalar(
+    info_df,
+    c("N", "sample_size", "n"),
+    default = NA_real_
+  )))
+  sdY <- suppressWarnings(as.numeric(first_non_missing_scalar(
+    info_df,
+    c("sdY", "sdy"),
+    default = NA_real_
+  )))
+  case_fraction <- suppressWarnings(as.numeric(first_non_missing_scalar(
+    info_df,
+    c("s", "case_proportion", "case_prop", "case_fraction"),
+    default = NA_real_
+  )))
+
+  if (identical(trait_type, "cc") && (is.na(sample_size) || is.na(case_fraction))) {
+    stop(
+      "Binary/case-control pQTL/GWAS input requires sample size `N` and case fraction `s`.",
+      call. = FALSE
+    )
+  }
+
+  if (identical(trait_type, "quant") && is.na(sample_size) && is.na(sdY)) {
+    sdY <- 1
+  }
+
+  list(
+    type = trait_type,
+    N = sample_size,
+    sdY = sdY,
+    s = case_fraction
+  )
+}
+
+build_coloc_dataset <- function(coloc_region, suffix, trait_metadata) {
+  dataset <- list(
+    snp = coloc_region$rsid,
+    beta = coloc_region[[paste0("beta", suffix)]],
+    varbeta = coloc_region[[paste0("varbeta", suffix)]],
+    pvalues = coloc_region[[paste0("pvalue", suffix)]],
+    MAF = coloc_region[[paste0("maf", suffix)]],
+    type = trait_metadata$type
+  )
+
+  if (!is.na(trait_metadata$N)) {
+    dataset$N <- trait_metadata$N
+  }
+  if (identical(trait_metadata$type, "quant") && !is.na(trait_metadata$sdY)) {
+    dataset$sdY <- trait_metadata$sdY
+  }
+  if (identical(trait_metadata$type, "cc")) {
+    dataset$s <- trait_metadata$s
+  }
+
+  dataset
 }
 
 get_ensemblID <- function(gene_symbol, entity = "target") {
@@ -421,7 +516,11 @@ write_coloc_result <- function(
   eQTL_tissue,
   gene_symbol = gene,
   ensembl = NA_character_,
-  input_format = NA_character_
+  input_format = NA_character_,
+  trait_type = NA_character_,
+  trait_N = NA_real_,
+  trait_sdY = NA_real_,
+  trait_s = NA_real_
 ) {
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -433,9 +532,16 @@ write_coloc_result <- function(
       region = region,
       tissue = eQTL_tissue,
       input_format = input_format,
+      trait_type = trait_type,
+      trait_N = trait_N,
+      trait_sdY = trait_sdY,
+      trait_s = trait_s,
       pp4_cond = PP.H4.abf / (PP.H3.abf + PP.H4.abf)
     ) |>
-    dplyr::select(gene_name, gene_symbol, ensembl, region, tissue, input_format, dplyr::everything())
+    dplyr::select(
+      gene_name, gene_symbol, ensembl, region, tissue, input_format,
+      trait_type, trait_N, trait_sdY, trait_s, dplyr::everything()
+    )
 
   coloc_results_full <- coloc_results$results
   output_prefix <- paste(gene, region, eQTL_tissue, sep = "_")
@@ -461,7 +567,7 @@ run_coloc <- function(
   eqtl_dir = "/datasets/cbmr_shared/resources/gtex/GTEx_Analysis_v10_QTLs/GTEx_Analysis_v10_eQTL_all_associations/",
   sdY = 1
 ) {
-  required_region_cols <- c("range_bp", "CHR", "start", "end", "Gene", "ensembl", "file_path", "N")
+  required_region_cols <- c("range_bp", "CHR", "start", "end", "Gene", "ensembl", "file_path")
   assert_required_columns(pqtl_info, required_region_cols, "region input")
 
   region_id <- pqtl_info$range_bp[[1]]
@@ -474,7 +580,7 @@ run_coloc <- function(
   input_format <- if ("input_format" %in% colnames(pqtl_info)) pqtl_info$input_format[[1]] else NA_character_
   ensembl_id <- pqtl_info$ensembl[[1]]
   pqtl_path <- pqtl_info$file_path[[1]]
-  pqtl_sample_size <- unique(pqtl_info$N)[[1]]
+  trait_metadata <- get_coloc_trait_metadata(pqtl_info)
 
   cat(sprintf(
     "[region] Process %s | gene %s (%s), region %s\n",
@@ -536,15 +642,7 @@ run_coloc <- function(
     return(NULL)
   }
 
-  ds_pqtl <- list(
-    snp = coloc_region$rsid,
-    beta = coloc_region$beta.pqtl,
-    varbeta = coloc_region$varbeta.pqtl,
-    pvalues = coloc_region$pvalue.pqtl,
-    MAF = coloc_region$maf.pqtl,
-    N = pqtl_sample_size,
-    type = "quant"
-  )
+  ds_pqtl <- build_coloc_dataset(coloc_region, ".pqtl", trait_metadata)
   ds_eqtl <- list(
     snp = coloc_region$rsid,
     beta = coloc_region$beta.eqtl,
@@ -565,7 +663,11 @@ run_coloc <- function(
     eQTL_tissue,
     gene_symbol = gene_symbol,
     ensembl = ensembl_id,
-    input_format = input_format
+    input_format = input_format,
+    trait_type = trait_metadata$type,
+    trait_N = trait_metadata$N,
+    trait_sdY = trait_metadata$sdY,
+    trait_s = trait_metadata$s
   )
 
   coloc_result
