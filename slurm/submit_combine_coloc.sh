@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # CONST: keep these in sync with slurm/submit_coloc_gtex_v10.sh
-PROJECT_DIR="/projects/cbmr_shared/people/wkq953/non-GDPR/project_share/Saliva/coloc"
+PROJECT_DIR="target_project_pth"
 REGION_INPUT="${PROJECT_DIR}/result/all_genes_within_range_with_ensemblID.csv"
 OUTPUT_DIR="${PROJECT_DIR}/result/coloc_pqtl_eqtl_gtex_v10_w_region"
 SUBMIT_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

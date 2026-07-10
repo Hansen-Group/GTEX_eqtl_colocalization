@@ -113,7 +113,7 @@ module load --auto R/4.3.3
 
 Rscript scripts/run_coloc_gtex_v10.R \
   --tissue Liver \
-  --project-dir /projects/cbmr_shared/people/wkq953/non-GDPR/project_share/Saliva/coloc \
+  --project-dir target_project_pth \
   --input result/all_genes_within_range_with_ensemblID.csv \
   --output-dir result/coloc_pqtl_eqtl_gtex_v10_w_region \
   --eqtl-dir /datasets/cbmr_shared/resources/gtex/GTEx_Analysis_v10_QTLs/GTEx_Analysis_v10_eQTL_all_associations \
@@ -204,7 +204,7 @@ Accepted alternative columns:
 Edit the constants at the top of `slurm/submit_coloc_gtex_v10.sh`:
 
 ```bash
-PROJECT_DIR="/projects/cbmr_shared/people/wkq953/non-GDPR/project_share/Saliva/coloc"
+PROJECT_DIR="target_project_pth"
 REGION_INPUT="${PROJECT_DIR}/result/all_genes_within_range_with_ensemblID.csv"
 GTEX_EQTL_DIR="/datasets/cbmr_shared/resources/gtex/GTEx_Analysis_v10_QTLs/GTEx_Analysis_v10_eQTL_all_associations"
 OUTPUT_DIR="${PROJECT_DIR}/result/coloc_pqtl_eqtl_gtex_v10_w_region"

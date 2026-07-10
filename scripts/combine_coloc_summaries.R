@@ -97,7 +97,7 @@ load_coloc_packages()
 project_dir <- arg_or_default(
   args,
   "project-dir",
-  Sys.getenv("COLOC_PROJECT_DIR", unset = "/projects/cbmr_shared/people/wkq953/non-GDPR/project_share/Saliva/coloc/")
+  Sys.getenv("COLOC_PROJECT_DIR", unset = getwd())
 )
 project_dir <- normalizePath(project_dir, mustWork = FALSE)
 
